@@ -24,3 +24,20 @@ docker run --name mysql-demo -d -p3366:3306 \
 mysql:5.7 
 ```
 
+## mysqld-exporter
+
+对目标mysql设定一个指定的监控用户(该用户权限是在一定范围内的)：
+```shell
+docker exec -it mysql-demo bash
+mysql -u root --password=123456 -e "GRANT REPLICATION CLIENT, PROCESS ON *.* TO 'monitor'@'%' IDENTIFIED BY '123456';"
+mysql -u root --password=123456 -e "GRANT SELECT ON performance_schema.* TO 'monitor'@'%';"
+mysql -u root --password=123456 -e "flush privileges;"
+```
+
+运行mysqld-exporter服务：
+```shell
+docker run -d --name mysqld-exporter \
+  -p 9104:9104 \
+  -e DATA_SOURCE_NAME="monitor:123456@(192.168.100.58:3366)/" \
+  prom/mysqld-exporter
+```
