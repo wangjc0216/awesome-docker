@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysqld-exporter
+  namespace: kube-system
+  labels:
+    app: mysqld-exporter
+spec:
+  selector:
+    matchLabels:
+      app: mysqld-exporter
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: mysqld-exporter
+    spec:
+      containers:
+        - image: prom/mysqld-exporter:v0.12.1
+          imagePullPolicy: IfNotPresent
+          name: mysqld-exporter
+          env:
+            - name: DATA_SOURCE_NAME
+              value: 'monitor:123456@(mysql.default:3306)'
+          ports:
+            - containerPort: 9104
+              protocol: TCP
+              name: http
+          resources:
+            requests:
+              cpu: 100m
+              memory: 512Mi
+            limits:
+              cpu: 100m
+              memory: 512Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysqld-exporter
+  namespace: kube-system
+  labels:
+    app: mysqld-exporter
+spec:
+  type: ClusterIP
+  selector:
+    app: mysqld-exporter
+  ports:
+    - name: http
+      port: 9104
+      targetPort: 9104
+      protocol: TCP
