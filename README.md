@@ -4,7 +4,6 @@
 [TOC]
 
 ## mysql
-
 基础使用：
 ```shell
 docker run --name mysql-demo -d -p3366:3306 -e MYSQL_ROOT_PASSWORD=123456 mysql:5.7 
@@ -25,7 +24,6 @@ mysql:5.7
 ```
 
 ## mysqld-exporter
-
 对目标mysql设定一个指定的监控用户(该用户权限是在一定范围内的)：
 ```shell
 docker exec -it mysql-demo bash
@@ -41,3 +39,18 @@ docker run -d --name mysqld-exporter \
   -e DATA_SOURCE_NAME="monitor:123456@(192.168.100.58:3366)/" \
   prom/mysqld-exporter
 ```
+[项目链接](https://github.com/prometheus/mysqld_exporter)
+
+## redis
+基础使用：
+```shell
+docker run -itd --name redis-test -p 6379:6379 redis:6.2.3
+```
+
+## redis-exporter
+oliver006/redis_exporter:v1.23.1
+
+```shell
+docker run -d --name redis-exporter -p 9121:9121 oliver006/redis_exporter:v1.23.1 -redis.addr  10.0.0.199:6379
+```
+[项目链接](https://github.com/oliver006/redis_exporter)

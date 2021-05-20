@@ -19,6 +19,12 @@ kubectl run busybox --rm -ti  --image=busybox /bin/sh   --image-pull-policy=IfNo
 / # ping ... (来ping一些内容)
 ```
 
+## redis
+- [x] [redis deployment](./deploy-redis.yaml)
 
+## redis-exporter
+- [x] [redis-exporter deployment(sidecar)](./deploy-redis-exporter.yaml): 与redis写在一起
+- [x] [redis-exporter deployment](./deploy-redisexporter.yaml)：与redis分开写
 
+[参考链接](https://github.com/oliver006/redis_exporter/blob/master/contrib/k8s-redis-and-exporter-deployment.yaml)
 
