@@ -12,7 +12,7 @@ docker run --name mysql-demo -d -p3366:3306 -e MYSQL_ROOT_PASSWORD=123456 mysql:
 
 基于mysql构建镜像(如更新mysql配置、初始化表)：
 ```shell
-docker build -t mysql:5.7-test ./mysqlDockerfile
+docker build -t mysql:5.7-test ./container/mysqlDockerfile
 ```
 
 将初始化sql语句并将存储内容挂载在容器中：
