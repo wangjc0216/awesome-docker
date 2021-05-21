@@ -28,3 +28,5 @@ kubectl run busybox --rm -ti  --image=busybox /bin/sh   --image-pull-policy=IfNo
 
 [参考链接](https://github.com/oliver006/redis_exporter/blob/master/contrib/k8s-redis-and-exporter-deployment.yaml)
 
+## nginx
+- [x] [nginx deployment](./deploy-nginx.yaml)
