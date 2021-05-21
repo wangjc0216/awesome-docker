@@ -1,3 +1,32 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: nginx
+  labels:
+    app: nginx
+data:
+  index.html: |-
+    <html>
+
+    <head>
+    <meta charset="UTF-8">
+    <title>监控系统入口</title>
+    </head>
+
+    <body>
+
+    <p>监控系统</p>
+
+
+    <a href="http://192.168.9.105:30601">日志监控平台</a>
+
+    <p/>
+
+    <a href="http://192.168.9.105:30000">指标监控平台</a>
+    </body>
+
+    </html>
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -6,7 +35,7 @@ spec:
   selector:
     matchLabels:
       app: nginx
-  replicas: 2 # tells deployment to run 2 pods matching the template
+  replicas: 1 # tells deployment to run 2 pods matching the template
   template:
     metadata:
       labels:
@@ -17,6 +46,17 @@ spec:
           image: nginx:1.14.2
           ports:
             - containerPort: 80
+          volumeMounts:
+            - mountPath: /usr/share/nginx/html/index.html
+              subPath: index.html
+              name: index
+      volumes:
+        - name: index
+          configMap:
+            name: nginx
+            items:
+              - key: index.html
+                path: index.html
 ---
 apiVersion: v1
 kind: Service
@@ -32,7 +72,6 @@ spec:
     - port: 80
       targetPort: 80
       nodePort: 30080
-
 
 
 

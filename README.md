@@ -1,8 +1,14 @@
 # 常用的服务容器化命令
 
+## content of table
 
-[TOC]
+* [mysql](#mysql)
+* [mysqld-exporter](#mysqld-exporter)
+* [redis](#redis)
+* [redis-exporter](#redis-exporter)
+* [nginx](#nginx)
 
+d
 ## mysql
 基础使用：
 ```shell
@@ -54,3 +60,78 @@ oliver006/redis_exporter:v1.23.1
 docker run -d --name redis-exporter -p 9121:9121 oliver006/redis_exporter:v1.23.1 -redis.addr  10.0.0.199:6379
 ```
 [项目链接](https://github.com/oliver006/redis_exporter)
+
+## nginx
+```shell
+docker run --name nginx-demo -d  -p 8080:80  -v $PWD/nginx.conf:/etc/nginx/nginx.conf  nginx:1.14.2 
+```
+默认的nginx.conf基础上增加server部分，如下面nginx.conf：
+```shell
+user  nginx;
+worker_processes  1;
+
+error_log  /var/log/nginx/error.log warn;
+pid        /var/run/nginx.pid;
+
+
+events {
+    worker_connections  1024;
+}
+
+
+http {
+    include       /etc/nginx/mime.types;
+    default_type  application/octet-stream;
+
+    log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+                      '$status $body_bytes_sent "$http_referer" '
+                      '"$http_user_agent" "$http_x_forwarded_for"';
+
+    access_log  /var/log/nginx/access.log  main;
+
+    sendfile        on;
+    #tcp_nopush     on;
+
+    keepalive_timeout  65;
+
+    #gzip  on;
+    
+    # 自己加的部分，80端口默认跳转到/tmp/index.html页面
+    server {
+	listen 80;
+        location / {
+    	  root /tmp;
+	  index index.html;
+        }
+   }    
+    # 在该目录下会有一个default.conf,其中报错location / 中的index.html,也就是默认的NGINX页面
+    include /etc/nginx/conf.d/*.conf;
+}
+```
+其实不需要这样去处理，可以通过挂载index.html文件来进行修改。如：
+```shell
+docker run --name nginx-demo -d  -p 8080:80  -v $PWD/index.html:/usr/share/nginx/html/index.html  nginx:1.14.2
+```
+其中index.html如下：
+```shell
+<html>
+
+<head>
+<meta charset="UTF-8">
+<title>监控系统入口</title>
+</head>
+
+<body>
+
+<p>监控系统</p>
+
+
+<a href="http://192.168.9.105:30601">日志监控平台</a>
+
+<p/>
+
+<a href="http://192.168.9.105:30000">指标监控平台</a>
+</body>
+
+</html>
+```
