@@ -10,4 +10,4 @@
 
 [常用服务kubernetes部署](./kubernetes/README.md)
 
-[容器的namespace]()
+[容器的namespace](./namespace/README.md)
