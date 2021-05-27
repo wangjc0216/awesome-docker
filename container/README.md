@@ -7,6 +7,9 @@
 * [redis](#redis)
 * [redis-exporter](#redis-exporter)
 * [nginx](#nginx)
+* [busybox](#busybox)
+* [ftpd_server](#ftpd_server)
+
 
 
 ## mysql
@@ -135,3 +138,24 @@ docker run --name nginx-demo -d  -p 8080:80  -v $PWD/index.html:/usr/share/nginx
 
 </html>
 ```
+
+##  busybox
+
+```shell
+docker run --name busybox-demo -d  busybox sleep 3600
+```
+
+## ftpd_server
+```shell
+docker run -d --name ftpd_server \ 
+-p 1023:21 \
+-p 30010-30019:30010-30019 \ 
+-e "FTP_PASSIVE_PORTS=30010:30019" \  
+-v  /tmp/:/home/miles \
+-e FTP_USER_HOME=/home/miles \ 
+-e FTP_USER_NAME=miles \
+-e FTP_USER_PASS=123456 \
+-e "PUBLICHOST=192.168.9.105" \ 
+stilliard/pure-ftpd
+```
+[参考链接](https://mileslin.github.io/2020/02/%E4%BD%BF%E7%94%A8-Docker-%E5%BB%BA%E7%BD%AE-FTP-SFTP-%E7%92%B0%E5%A2%83/)
