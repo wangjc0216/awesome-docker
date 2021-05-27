@@ -241,6 +241,10 @@ brctl addbr br0
 ip link set br0 up
 #可以通过此给网桥设置ip，这里不需要
 #ip addr add 12.0.0.1/24 dev br0
+#这个时候可以通过route -n看到12.0.0.0路由被自动更新到路由表中了
+#route -n
+#Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+#12.0.0.0        0.0.0.0         255.255.255.0   U     0      0        0 br0
 
 # 新增三个netns
 ip netns add ns0
