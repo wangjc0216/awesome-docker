@@ -84,7 +84,7 @@ a2da028c0d2a66b25065c2a0d19fa596448d6e7f4aaf70f0809568768568d1c5
 
 Netfilter是通过NAT规则起到了路由的作用。下图为NS1中的程序通过veth、linux bridge、网络协议栈、eth0，将请求传到网络中。
 
-![img.png](img/netfilter.png)介绍
+![img.png](img/netfilter.png)
 
 ## 2. 使用
 
@@ -112,7 +112,7 @@ ip addr add 11.0.0.2/24 dev tap1
 ip addr show tap0
 ip addr show tap1
 ip link show tap0
-ip link show tap1
+ip link show tap1d
 
 # 添加netns
 ip netns add ns0
@@ -239,6 +239,8 @@ brctl delbr <bridge>
 brctl addbr br0
 # 启动网桥
 ip link set br0 up
+#可以通过此给网桥设置ip，这里不需要
+#ip addr add 12.0.0.1/24 dev br0
 
 # 新增三个netns
 ip netns add ns0
@@ -284,8 +286,14 @@ ip netns exec ns0 ping 11.0.0.3
 
 ## 3. 最佳实践
 
+### 3.1 链路分析
+
+
+
+### 3.2 docker的网络实践
 //todo 了解下docker是如何做的
 
+### 3.3 kubernetes的网络实践
 //todo 了解下kubernetes是如何做的
 
 ## 4. 原理分析
